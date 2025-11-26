@@ -10,7 +10,7 @@ To keep your work fully anonymous, please create a separate GitHub account for t
 
 You can make your account in any way that works for you, but here’s a simple method that we’ve found works well:
 
-- Create a new, non-identifying Gmail account to use only for this study.
+- Create a new, non-identifying Gmail account to use only for this study at https://accounts.google.com/signup
 - Sign up at https://github.com/signup with that email.
 - Choose a non-identifying username in the format `{favorite_fruit}-{favorite_animal}` (example: `mango-otter`).
 - Do not include personal details (name, photo, location) and use this account only for study-related work.
@@ -68,9 +68,11 @@ We use a lightly modified version of the original SpecStory tool that also recor
 
 ### Installation
 
+First navigate to the specstory folder by running `cd tools/specstory`.
+
 Install both components following the SpecStory installation guide ([Google Doc](https://docs.google.com/document/d/1kcVAi28N4hAu_FuuRBffViv0rwcA2tny7jCBvH-0zyI/edit?tab=t.1tnketgq1kv3) or `tools/specstory/specstory_installation.pdf`):
 
-- **CLI tool** (for terminal workflows): `tools/specstory/specstory_cli/`
+- **CLI tool** (for Claude Code): `tools/specstory/specstory_cli/`
 - **Editor extension** (Cursor/VS Code): `tools/specstory/specstory_ext/`
 
 ### Verification
@@ -100,7 +102,7 @@ To validate the hooks are active:
 pre-commit run --all-files
 ```
 
-Behind the scenes both hooks call `.config/ai-hooks/ai_guard.py`, so updates to the guard logic propagate everywhere automatically. For more details, see `/.config/ai-hooks/README.md`
+Behind the scenes both hooks call `.config/git-hooks/ai_guard.py`, so updates to the guard logic propagate everywhere automatically. For more details, see `/.config/git-hooks/README.md`
 
 > Reminder to update your [status](https://forms.gle/SLXdJk3SbjHCYnpd9) once you have completed this step.
 
