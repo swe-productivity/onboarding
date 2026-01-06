@@ -67,6 +67,7 @@ notes/drafts/
 __pycache__/
 *.pytest_cache/
 venv/
+.venv/
 
 # ===============================
 # General OS / editor clutter

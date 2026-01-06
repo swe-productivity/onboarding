@@ -129,7 +129,10 @@ trap cleanup_on_interrupt INT
 echo "Installing Specstory wrapper..."
 
 # --- Step 0: Pre-flight checks ---
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Get script directory (works in both bash and zsh)
+# Use BASH_SOURCE if available (bash), otherwise fall back to $0
+SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 WRAPPER_PY_SOURCE="${SCRIPT_DIR}/specstory_wrapper.py"
 
 if [[ ! -f "$WRAPPER_PY_SOURCE" ]]; then
@@ -184,9 +187,12 @@ exec python3 "$PYTHON_WRAPPER" "\$@"
 EOF
 
 echo "➡ Installing claude wrapper launcher → $CLAUDE_WRAPPER_BIN"
-cat > "$CLAUDE_WRAPPER_BIN" <<EOF
+
+cat > "$CLAUDE_WRAPPER_BIN" <<'EOF'
 #!/usr/bin/env bash
-exec "$WRAPPER_BIN" run claude --no-cloud-sync "\$@"
+FILTERED_PATH="$(echo "$PATH" | tr ':' '\n' | grep -v "^${HOME}/bin$" | tr '\n' ':' | sed 's/:$//')"
+export PATH="$FILTERED_PATH"
+exec "$HOME/bin/specstory" run claude --no-cloud-sync "$@"
 EOF
 
 chmod +x "$WRAPPER_BIN" "$CLAUDE_WRAPPER_BIN"
@@ -230,8 +236,11 @@ get_activation_hook() {
   cat <<'EOF'
 export PATH="$HOME/bin:$PATH"
 # Use function instead of alias for better compatibility
+# Filters $HOME/bin from PATH before calling specstory to avoid infinite recursion
 claude() {
-  specstory run claude --no-cloud-sync "$@"
+  local filtered_path
+  filtered_path="$(echo "$PATH" | tr ':' '\n' | grep -v "^${HOME}/bin$" | tr '\n' ':' | sed 's/:$//')"
+  PATH="$filtered_path" specstory run claude --no-cloud-sync "$@"
 }
 EOF
 }
@@ -414,7 +423,10 @@ case "$VENV_CHOICE" in
     echo
     echo "  $PATH_EXPORT"
     echo "  claude() {"
-    echo "    specstory run claude --no-cloud-sync \"\$@\""
+    echo "    # Filter \$HOME/bin from PATH to avoid infinite recursion"
+    echo "    local filtered_path"
+    echo "    filtered_path=\"\$(echo \"\$PATH\" | tr ':' '\\n' | grep -v \"^\${HOME}/bin\\\$\" | tr '\\n' ':' | sed 's/:\$//')\""
+    echo "    PATH=\"\$filtered_path\" specstory run claude --no-cloud-sync \"\$@\""
     echo "  }"
     echo
     echo "To remove the function when deactivating, add:"
