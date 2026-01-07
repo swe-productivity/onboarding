@@ -2,6 +2,8 @@
 
 > **Note:** This README was updated.
 
+> **Additional Note:** This is a second note.
+
 Thank you for your interest in our study. This guide walks you through all of the required setup steps so that you're fully ready to participate in the main study.
 
 As you work through this onboarding guide, please update your completion status using [this form](https://forms.gle/SLXdJk3SbjHCYnpd9).
