@@ -12,17 +12,24 @@ const defaults = JSON.parse(
 );
 
 export function convert(type, value, from, to) {
+  // Validate input value is numeric
+  const numValue = Number(value);
+  if (isNaN(numValue)) {
+    throw new Error("Invalid number: value must be numeric");
+  }
+
   switch (type) {
     case "temperature":
       return temperature.convertTemperature(
-        value,
+        numValue,
         from || defaults.temperature.defaultFrom,
-        to || defaults.temperature.defaultTo
+        to || defaults.temperature.defaultTo,
+        defaults.precision
       );
     case "distance":
-      return distance.convertDistance(value, from, to);
+      return distance.convertDistance(numValue, from, to, defaults.precision);
     case "weight":
-      return weight.convertWeight(value, from, to);
+      return weight.convertWeight(numValue, from, to, defaults.precision);
     default:
       throw new Error("Unknown type " + type);
   }
