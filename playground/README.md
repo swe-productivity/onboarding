@@ -38,9 +38,20 @@ npm install
 ## Usage
 
 ```bash
+# Temperature conversions
 npx convert temperature 100 C F
+npx convert temperature 273.15 K C
+npx convert temperature 0 K F
+
+# Distance conversions
 npx convert distance 5 km mi
+npx convert distance 1000 m km
+npx convert distance 1609 m mi
+
+# Weight conversions
 npx convert weight 200 g oz
+npx convert weight 1 lb g
+npx convert weight 16 oz lb
 ```
 
 ## Run tests
